@@ -18,7 +18,11 @@ const userSchema = new mongoose.Schema({
     minlength: 6, // Use minlength instead of min
     maxlength: 64, // Use maxlength instead of max
   },
-  secret: {
+  selectedQuestion: {
+    type: String,
+    required: true,
+  },
+  secretAnswer: {
     type: String,
     required: true,
   },
