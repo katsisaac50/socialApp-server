@@ -96,17 +96,13 @@ app.use(express.urlencoded({ extended: true }));
 // Set up routes
 readdirSync('./routes').forEach((file) => {
   const route = require(`./routes/${file}`);
-  app.use('/api/v1/posts', require('./routes/posts'));
-  app.use('/api/v1', route);
+  // app.use('/api/v1/posts', require('./routes/posts'));
+  app.use('/api', route);
 });
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.post('/api/register', (req, res) => {
-  console.log('Register =>', req.body);
-  res.status(200).json({ message: 'Registration successful' });
-});
 
 // Create an HTTP server
 const server = process.env.NODE_ENV === 'production'
