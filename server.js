@@ -97,8 +97,10 @@ app.use(express.urlencoded({ extended: true }));
 readdirSync('./routes').forEach((file) => {
   const route = require(`./routes/${file}`);
   // app.use('/api/v1/posts', require('./routes/posts'));
+  console.log(file);
   app.use('/api', route);
 });
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });

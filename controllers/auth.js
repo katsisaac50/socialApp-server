@@ -64,6 +64,31 @@ register = async (req, res) => {
 
 }
 
+const login = async (req, res) => {
+
+    console.log("login =>", req.body);
+
+    const { email, password } = req.body;
+
+    // check if user exists
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) return res
+   .status(400)
+   .json({ message: 'User does not exist' });
+
+    // check if password is correct
+    const isPasswordCorrect = await comparePassword(password, existingUser.password);
+    if (!isPasswordCorrect) return res
+    .status(400)
+    .json({ message: 'Invalid credentials' });
+
+    return res.status(200).json({
+        _id: existingUser._id,  })
+};
+
+
+
 module.exports = {
-    register
+    register,
+    login
 }
