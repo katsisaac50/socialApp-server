@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const { hashPassword, comparePassword } = require('../helpers/auth');
+const jwt = require('jsonwebtoken');
 
 register = async (req, res) => {
 
@@ -66,9 +67,9 @@ register = async (req, res) => {
 
 const login = async (req, res) => {
 
-    console.log("login =>", req.body);
+    try {
 
-    const { email, password } = req.body;
+       const { email, password } = req.body;
 
     // check if user exists
     const existingUser = await User.findOne({ email });
@@ -82,8 +83,33 @@ const login = async (req, res) => {
     .status(400)
     .json({ message: 'Invalid credentials' });
 
+    // generate token
+    const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // save user token
+    existingUser.token = token;
+    
+    // await existingUser.save();
+
+    // return user
+    existingUser.password = undefined;
+    existingUser.secretAnswer = undefined;
+
     return res.status(200).json({
-        _id: existingUser._id,  })
+        existingUser,
+        token
+        }) 
+    } catch (error) {
+
+        console.log("login failed =>", error);
+
+        return res.status(400).json(
+            { 
+            message: 'Login failed' 
+            });
+    }
+
+    
 };
 
 
