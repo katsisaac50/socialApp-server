@@ -112,6 +112,22 @@ const login = async (req, res) => {
     
 };
 
+const currentUser = async (req, res) => {
+    conseole.log("current user =>", req.headers);
+
+    // try {
+
+    //     const user = await User.findOne({ email: req.user.email }).select('-password -secretAnswer');
+    // } catch (error) {
+
+    //     console.log("current user failed =>", error);
+    //     return res.status(400).json(
+    //         { 
+    //         message: 'Current user failed' 
+    //         });
+    // }
+}
+
 
 
 module.exports = {
