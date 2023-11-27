@@ -113,24 +113,31 @@ const login = async (req, res) => {
 };
 
 const currentUser = async (req, res) => {
-    conseole.log("current user =>", req.headers);
+    console.log("current user =>", req.auth);
 
-    // try {
+    try {
 
-    //     const user = await User.findOne({ email: req.user.email }).select('-password -secretAnswer');
-    // } catch (error) {
+        const user = await User.findOne({ email: req.auth.email }).select('-password -secretAnswer');
 
-    //     console.log("current user failed =>", error);
-    //     return res.status(400).json(
-    //         { 
-    //         message: 'Current user failed' 
-    //         });
-    // }
+        return res.status(200).json({
+            success : true
+            })
+
+
+    } catch (error) {
+
+        console.log("current user failed =>", error);
+        return res.status(400).json(
+            { 
+            message: 'Current user failed' 
+            });
+    }
 }
 
 
 
 module.exports = {
     register,
-    login
+    login,
+    currentUser
 }
