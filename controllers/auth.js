@@ -132,6 +132,11 @@ const currentUser = async (req, res) => {
             message: 'Current user failed' 
             });
     }
+};
+
+const forgotPassword = async (req, res) => {
+
+    console.log("forgot password =>", req.body);
 }
 
 
