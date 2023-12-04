@@ -132,47 +132,66 @@ const currentUser = async(req, res) => {
 
 const forgotPassword = async(req, res) => {
 
-    const { email, password, repeatPassword, selectedQuestion, secretAnswer } = req.body;
+    const { email, newPassword, repeatPassword, selectedQuestion, secretAnswer } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email});
 
     if (!existingUser) {
         return res
             .status(400)
             .json({ message: 'User does not exist' });
     }
-    console.log(existingUser, selectedQuestion)
 
 
-    if (selectedQuestion !== existingUser.selectedQuestion && secretAnswer !== existingUser.secretAnswer) {
+    if (existingUser.selectedQuestion !== selectedQuestion) {
 
         return res
             .status(400)
-            .json({ message: 'Invalid credentials' });
-
+            .json({ message: 'Selected Question does not match' });
     }
 
-    if (!password || password.length < 6) {
+    if (existingUser.secretAnswer !== secretAnswer) {
+
+        return res
+            .status(400)
+            .json({ message: 'Secret Answer does not match' });
+    }
+
+    if (!newPassword || newPassword.length < 6) {
 
         return res
             .status(400)
             .json({ message: 'Password is required and should be min 6 characters long' });
     }
 
-    if (password !== repeatPassword) {
+    if (newPassword !== repeatPassword) {
 
         return res
             .status(400)
             .json({ message: 'Passwords do not match' });
     }
 
-    const hashedPassword = await hashPassword(password);
+    try {
 
-    existingUser.password = hashedPassword;
+        const hashedPassword = await hashPassword(newPassword);
 
+        existingUser.password = hashedPassword;
 
+        await existingUser.save();
 
-    console.log("forgot password =>", req.body);
+        return res.status(200).json({
+            
+            success: true,
+        })
+    } catch (error) {
+
+        console.log("forgot password failed =>", error);
+
+        return res.status(400).json({
+            message: 'Forgot password failed'
+        })
+    }
+
 }
 
 
