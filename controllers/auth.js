@@ -181,7 +181,7 @@ const imageUpload = async(req, res) => {
     try {
 
         const user = await User.findOne({ email: req.auth.email }).select('-password -secretAnswer');
-console.log("user =>", user);
+
         if (!user) {
 
             return res
@@ -189,10 +189,23 @@ console.log("user =>", user);
                 .json({ message: 'User does not exist' });
         }
 
-        const result = await cloudinary.uploader.upload(req.files.image.path);
+        const result = await cloudinary.uploader.upload(req.files.image.path, {
+            public_id: `${Date.now()}`,
+            resource_type: "auto"
+        });
 
-        console.log("result =>", result);
+        return res.status(200).json({
+            success: true,
+            message: 'Image uploaded successfully',
+            result
+        })
     } catch (error) {
+
+        console.log("image upload failed =>", error);
+
+        return res.status(400).json({
+            message: 'Image upload failed'
+        })
         
     }
 }
