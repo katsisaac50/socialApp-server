@@ -161,6 +161,28 @@ const createPost = async(req, res) => {
             message: 'Create post failed'
         })
     }
+};
+
+const imageUpload = async(req, res) => {
+
+    console.log("image upload =>", req.body);
+    try {
+
+        const user = await User.findOne({ email: req.auth.email }).select('-password -secretAnswer');
+
+        if (!user) {
+
+            return res
+                .status(400)
+                .json({ message: 'User does not exist' });
+        }
+
+        const { image } = req.body;
+
+        
+    } catch (error) {
+        
+    }
 }
 
 const forgotPassword = async(req, res) => {
@@ -234,5 +256,6 @@ module.exports = {
     login,
     currentUser,
     forgotPassword,
-    createPost
+    createPost,
+    imageUpload
 }
