@@ -130,6 +130,11 @@ const currentUser = async(req, res) => {
     }
 };
 
+const createPost = async(req, res) => {
+    const { content } = req.body;
+    console.log("create post =>", content);
+}
+
 const forgotPassword = async(req, res) => {
 
     const { email, newPassword, repeatPassword, selectedQuestion, secretAnswer } = req.body;
@@ -200,5 +205,6 @@ module.exports = {
     register,
     login,
     currentUser,
-    forgotPassword
+    forgotPassword,
+    createPost
 }
