@@ -2,14 +2,27 @@ const User = require('../models/user');
 const Post = require('../models/post');
 const { hashPassword, comparePassword } = require('../helpers/auth');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('cloudinary');
+
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 register = async(req, res) => {
 
-    //  console.log('Register =>', req.body);
 
-    const { name, email, password, repeatPassword, selectedQuestion, secretAnswer } = req.body;
+    const { 
+        name, 
+        email, 
+        password, 
+        repeatPassword, 
+        selectedQuestion, 
+        secretAnswer 
+        } = req.body;
 
-    // console.log(secretAnswer, selectedQuestion, email, name, password, repeatPassword);
 
     // validations
     if (!name) return res.status(400).json({ message: 'Name is required' });
@@ -165,11 +178,10 @@ const createPost = async(req, res) => {
 
 const imageUpload = async(req, res) => {
 
-    console.log("image upload =>", req.body);
     try {
 
         const user = await User.findOne({ email: req.auth.email }).select('-password -secretAnswer');
-
+console.log("user =>", user);
         if (!user) {
 
             return res
@@ -177,9 +189,9 @@ const imageUpload = async(req, res) => {
                 .json({ message: 'User does not exist' });
         }
 
-        const { image } = req.body;
+        const result = await cloudinary.uploader.upload(req.files.image.path);
 
-        
+        console.log("result =>", result);
     } catch (error) {
         
     }
