@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Post = require('../models/post');
 const { hashPassword, comparePassword } = require('../helpers/auth');
 const jwt = require('jsonwebtoken');
 
@@ -133,6 +134,33 @@ const currentUser = async(req, res) => {
 const createPost = async(req, res) => {
     const { content } = req.body;
     console.log("create post =>", content);
+
+    try {
+
+        const user = await User.findOne({ email: req.auth.email }).select('-password -secretAnswer');
+
+        if (!user) {
+
+            return res
+                .status(400)
+                .json({ message: 'User does not exist' });
+        }
+
+        const newPost = new Post({
+            content,
+            user: user._id
+        });
+
+        await newPost.save();
+            
+    } catch (error) {
+
+        console.log("create post failed =>", error);
+
+        return res.status(400).json({
+            message: 'Create post failed'
+        })
+    }
 }
 
 const forgotPassword = async(req, res) => {
