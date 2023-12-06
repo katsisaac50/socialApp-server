@@ -172,7 +172,7 @@ const createPost = async(req, res) => {
 
             success: true,
             message: 'Post created successfully',
-            
+
         })
 
     } catch (error) {
@@ -215,6 +215,14 @@ const imageUpload = async(req, res) => {
         return res.status(400).json({
             message: 'Image upload failed'
         })
+        
+    }
+};
+
+const postByUser = async(req, res) => {
+    try {
+        
+    } catch (error) {
         
     }
 }
@@ -291,5 +299,6 @@ module.exports = {
     currentUser,
     forgotPassword,
     createPost,
-    imageUpload
+    imageUpload,
+    postByUser
 }
