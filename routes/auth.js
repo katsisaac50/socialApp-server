@@ -27,7 +27,7 @@ router.post (
         formidableMiddleware({maxFileSize: 5 * 1024 * 1024}), 
         imageUpload
         );
-router.get('/user-posts', requireSignin, postByUser);
+
 
 
 module.exports = router;

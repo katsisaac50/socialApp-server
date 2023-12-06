@@ -219,14 +219,6 @@ const imageUpload = async(req, res) => {
     }
 };
 
-const postByUser = async(req, res) => {
-    try {
-        
-    } catch (error) {
-        
-    }
-}
-
 const forgotPassword = async(req, res) => {
 
     const { email, newPassword, repeatPassword, selectedQuestion, secretAnswer } = req.body;
@@ -300,5 +292,4 @@ module.exports = {
     forgotPassword,
     createPost,
     imageUpload,
-    postByUser
 }
