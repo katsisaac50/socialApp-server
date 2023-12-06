@@ -8,7 +8,8 @@ const cloudinary = require('cloudinary');
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true,
 })
 
 register = async(req, res) => {
@@ -145,7 +146,7 @@ const currentUser = async(req, res) => {
 };
 
 const createPost = async(req, res) => {
-    const { content } = req.body;
+    const { content, image } = req.body;
     console.log("create post =>", content);
 
     try {
@@ -161,11 +162,19 @@ const createPost = async(req, res) => {
 
         const newPost = new Post({
             content,
+            image,
             user: user._id
         });
 
         await newPost.save();
+
+        return res.status(200).json({
+
+            success: true,
+            message: 'Post created successfully',
             
+        })
+
     } catch (error) {
 
         console.log("create post failed =>", error);
