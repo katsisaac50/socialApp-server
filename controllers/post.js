@@ -5,8 +5,8 @@ const postByUser = async(req, res) => {
 
     try {
 
-        const posts = await Post.find({ user: req.params.userId }).populate('user','name _id image').sort('-createdAt').limit(10);
-
+        const posts = await Post.find({ user: req.auth.id }).populate('user','name _id image').sort('-createdAt').limit(10);
+        console.log(posts)
         return res.status(200).json({
 
             success: true,

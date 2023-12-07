@@ -7,3 +7,5 @@ const {
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
+
+module.exports = router;
