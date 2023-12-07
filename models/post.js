@@ -19,6 +19,11 @@ const postSchema = new mongoose.Schema({
         default: 0,
         ref: 'User'
     },
+    dislikes: {
+        type: Number,
+        default: 0,
+        ref: 'User'
+    },
     comments: [{
         text: String,
         created : {
