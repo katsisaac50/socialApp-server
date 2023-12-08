@@ -1,5 +1,14 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+
+const postLikes = async(req, res) => {
+
+    try {
+        const post = await Post.findById(req.params.id);
+    } catch (error) {
+        
+    }
+}
 const postByUser = async(req, res) => {
     console.log(req)
 
