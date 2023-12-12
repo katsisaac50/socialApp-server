@@ -28,5 +28,6 @@ const postByUser = async(req, res) => {
 }
 
 module.exports = {
-    postByUser
+    postByUser,
+    postLikes
 }

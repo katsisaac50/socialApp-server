@@ -7,7 +7,7 @@ const {requireSignin} = require('../middlewares');
 
 // controllers
 const {
-        register, 
+        register,
         createPost, 
         login, 
         currentUser, 
@@ -23,8 +23,8 @@ router.get('/current-user', requireSignin, currentUser);
 router.post('/create-post', requireSignin, createPost);
 router.post (
         '/upload-image', 
-        requireSignin, 
-        formidableMiddleware({maxFileSize: 5 * 1024 * 1024}), 
+        requireSignin,
+        formidableMiddleware({maxFileSize: 5 * 1024 * 1024}),
         imageUpload
         );
 
