@@ -9,8 +9,13 @@ const postLikes = async(req, res) => {
         
     }
 }
+
+const userPost = async(req, res) => {
+   console.log(req) 
+};
+
 const postByUser = async(req, res) => {
-    console.log(req)
+    
 
     try {
 
@@ -30,5 +35,6 @@ const postByUser = async(req, res) => {
 
 module.exports = {
     postByUser,
-    postLikes
+    postLikes,
+    userPost
 }
