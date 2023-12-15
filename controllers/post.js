@@ -12,6 +12,13 @@ const postLikes = async(req, res) => {
 
 const userPost = async(req, res) => {
    console.log(req) 
+   try {
+
+    const post = await Post.findById(req.params.id)
+    
+   } catch (error) {
+    console.log(error);
+   }
 };
 
 const postByUser = async(req, res) => {
