@@ -14,7 +14,11 @@ const userPost = async(req, res) => {
    console.log(req) 
    try {
 
-    const post = await Post.findById(req.params.id)
+    const post = await Post.findById(req.params.id);
+
+    return res.status(200).json({
+        post,
+    })
     
    } catch (error) {
     console.log(error);
