@@ -11,10 +11,10 @@ const postLikes = async(req, res) => {
 }
 
 const userPost = async(req, res) => {
-   console.log(req) 
+   console.log(req.params) 
    try {
 
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params._id);
 
     return res.status(200).json({
         post,

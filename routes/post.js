@@ -10,6 +10,6 @@ const {
 
 router.get('/user-posts', requireSignin, postByUser);
 router.post('/user-likes', requireSignin, postLikes);
-router.get("/user/post/:__dirname", requireSignin, userPost)
+router.get("/user/post/:_id", requireSignin, userPost)
 
 module.exports = router;
