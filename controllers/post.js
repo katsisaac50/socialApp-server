@@ -25,14 +25,30 @@ const userPost = async(req, res) => {
    }
 };
 
+const userPostUpdate = async(req, res) => {
+
+    console.log(req.params)
+
+    try {
+        const post = await Post.findById(req.params._id);
+    } catch (error) {
+        
+        console.log(error);
+
+        return res.status(400).json({
+            success: false,
+            message: 'Post not found'
+        })
+    }
+}
+
 const postByUser = async(req, res) => {
     
-
     try {
 
         // const posts = await Post.find({ user: req.auth.id }).populate('user','name _id image').sort('-createdAt').limit(10);
         const posts = await Post.find().populate('user','name _id image').sort('-createdAt').limit(10);
-        console.log(posts)
+       
         return res.status(200).json({
 
             success: true,
@@ -40,6 +56,11 @@ const postByUser = async(req, res) => {
         })
         
     } catch (error) {
+
+        return res.status(400).json({
+            success: false,
+            message: 'Posts not found'
+        })
         
     }
 }
@@ -47,5 +68,6 @@ const postByUser = async(req, res) => {
 module.exports = {
     postByUser,
     postLikes,
-    userPost
+    userPost,
+    userPostUpdate
 }
