@@ -49,6 +49,18 @@ const userPostUpdate = async(req, res) => {
     }
 }
 
+const deletePost = async (req, res) => {
+    try {
+        const post = await Post.findByIdAndDelete(req.params._id)
+        return res.status(200).json({
+            post,
+            message: "post successfully deleted"
+        })
+    } catch (error) {
+        console.log(error)
+    }
+};
+
 const postByUser = async(req, res) => {
     
     try {
@@ -76,5 +88,6 @@ module.exports = {
     postByUser,
     postLikes,
     userPost,
-    userPostUpdate
+    userPostUpdate,
+    deletePost
 }
