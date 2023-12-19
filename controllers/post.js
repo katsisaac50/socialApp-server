@@ -27,7 +27,7 @@ const userPost = async(req, res) => {
 
 const userPostUpdate = async(req, res) => {
 
-    console.log(req.params)
+    console.log("hehe", req)
 
     try {
         const post = await Post.findById(req.params._id);
