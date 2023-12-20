@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const cloudinary = require('cloudinary');
 
 const postLikes = async(req, res) => {
 
@@ -51,10 +52,15 @@ const userPostUpdate = async(req, res) => {
 
 const deletePost = async (req, res) => {
     try {
-        const post = await Post.findByIdAndDelete(req.params._id)
+        const post = await Post.findByIdAndDelete(req.params._id);
+
+        if(post.image && post.image.public_id){
+            const image = await cloudinary.uploader.destroy(post.image.public_id);
+        }
         return res.status(200).json({
             post,
-            message: "post successfully deleted"
+            message: "post successfully deleted",
+            ok: true
         })
     } catch (error) {
         console.log(error)
