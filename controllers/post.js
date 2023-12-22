@@ -2,10 +2,23 @@ const Post = require('../models/post');
 const User = require('../models/user');
 const cloudinary = require('cloudinary');
 
-const postLikes = async(req, res) => {
-
+const likePost = async(req, res) => {
+    
     try {
-        const post = await Post.findById(req.params.id);
+        const postId = req.params._id;
+        const he = await Post.findByIdAndUpdate(postId, { $inc: { likes: 1 } });
+        console.log(he)
+    } catch (error) {
+        
+    }
+}
+
+const dislikePost = async(req, res) => {
+    
+    try {
+        const postId = req.params._id;
+        const he = await Post.findByIdAndUpdate(postId, { $inc: { likes: -1 } });
+        console.log(he)
     } catch (error) {
         
     }
@@ -92,8 +105,9 @@ const postByUser = async(req, res) => {
 
 module.exports = {
     postByUser,
-    postLikes,
+    likePost,
     userPost,
     userPostUpdate,
-    deletePost
+    deletePost,
+    dislikePost
 }
