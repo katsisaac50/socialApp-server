@@ -6,8 +6,10 @@ const likePost = async(req, res) => {
     
     try {
         const postId = req.params._id;
-        const he = await Post.findByIdAndUpdate(postId, { $inc: { likes: 1 } });
-        console.log(he)
+        const {likes} = await Post.findByIdAndUpdate(postId, { $inc: { likes: 1 } });
+        return res.status(200).json({
+            likes
+        })
     } catch (error) {
         
     }
@@ -17,10 +19,12 @@ const dislikePost = async(req, res) => {
     
     try {
         const postId = req.params._id;
-        const he = await Post.findByIdAndUpdate(postId, { $inc: { likes: -1 } });
-        console.log(he)
+        const {likes} = await Post.findByIdAndUpdate(postId, { $inc: { likes: -1 } });
+        return res.status(200).json({
+            likes
+        })
     } catch (error) {
-        
+        console.log(error)
     }
 }
 
