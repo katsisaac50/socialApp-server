@@ -3,7 +3,10 @@ const Post = require('../models/post');
 const { hashPassword, comparePassword } = require('../helpers/auth');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary');
+const { nanoid } = require('nanoid') 
 
+
+const modelId = nanoid(6)
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
@@ -59,12 +62,13 @@ register = async(req, res) => {
         email,
         selectedQuestion,
         secretAnswer,
-        password: hashedPassword
+        password: hashedPassword,
+        userName: modelId
     }).save();
 
     try {
         await user.save();
-        console.log("register success =>", user);
+        // console.log("register success =>", user);
         return res.status(200).json({
             success: true,
             message: 'Registration successful'
