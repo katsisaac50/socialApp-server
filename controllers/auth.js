@@ -287,6 +287,74 @@ const forgotPassword = async(req, res) => {
 
 }
 
+const profileUpdate = async(req, res)=>{
+console.log(req.params);
+
+  
+try {
+    const userId = req.auth.id;
+
+    const {
+        name,
+        email,
+        selectedQuestion,
+        secretAnswer,
+        password,
+        repeatPassword,
+        about,
+        username,
+      } = req.body;
+
+    // Retrieve the user from the database
+    const user = await User.findById(userId);
+console.log(user)
+    // Update user properties
+    user.name = name;
+    user.email = email;
+    user.selectedQuestion = selectedQuestion;
+    user.secretAnswer = secretAnswer;
+    user.about = about;
+    user.userName = username;
+
+    // Manual validations
+  const errors = [];
+
+  if (!name) {
+    errors.push({ field: 'name', message: 'Name is required' });
+  }
+
+  if (!email || !email.includes('@')) {
+    errors.push({ field: 'email', message: 'Invalid email format' });
+  }
+
+  if (password && (password.length < 6 || password !== repeatPassword)) {
+    errors.push({ field: 'password', message: 'Invalid password or passwords do not match' });
+  }
+
+  if (!username) {
+    errors.push({ field: 'username', message: 'Username is required' });
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
+  }
+
+    // Check if password and repeatPassword are provided and match
+
+    if (password && repeatPassword && password === repeatPassword) {
+      user.password = password;
+    }
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ message: 'User profile updated successfully', user });
+  
+    
+} catch (error) {
+    console.log(error)
+}
+};
 
 
 module.exports = {
@@ -296,4 +364,5 @@ module.exports = {
     forgotPassword,
     createPost,
     imageUpload,
+    profileUpdate
 }
