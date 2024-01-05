@@ -13,7 +13,8 @@ const {
         currentUser, 
         forgotPassword,
         imageUpload,
-        profileUpdate
+        profileUpdate,
+        findPeople
         } = require('../controllers/auth');
 
 // routes
@@ -28,7 +29,8 @@ router.post (
         formidableMiddleware({maxFileSize: 5 * 1024 * 1024}),
         imageUpload
         );
-router.put ('/profile-update', requireSignin, profileUpdate)
+router.put ('/profile-update', requireSignin, profileUpdate);
+router.get ('/find-people', requireSignin, findPeople);
 
 
 
