@@ -203,11 +203,13 @@ const imageUpload = async (req, res) => {
 
 const findPeople = async (req, res) => {
   try {
-    const user = await User.findById(req.auth._id);
+    const user = await User.findById(req.auth.id);
+    console.log("user =>", user);
     // user.following
-    let following = user.followering;
-    following.push(req.auth._id);
-    const people = (await User.find({ _id: { $nin: following } })).limit(10);
+    let following = user.following;
+    following.push(req.auth.id);
+    const people = (await User.find({ id: { $nin: following } })).limit(10);
+    console.log("people =>", people);
     res.status(200).json({ people });
   } catch (error) {
     console.log(error);
