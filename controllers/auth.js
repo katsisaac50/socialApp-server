@@ -187,6 +187,21 @@ const imageUpload = async (req, res) => {
       resource_type: "auto",
     });
 
+    // // Create a new Post document
+    // const newPost = new Post({
+    //   content: 'Image post content', // Provide a default content or adjust as needed
+    //   user: user._id,
+    //   image: {
+    //     url: result.secure_url,
+    //     public_id: result.public_id,
+    //   },
+    // });
+
+    // // Save the new post to the database
+    // const savedPost = await newPost.save();
+
+    console.log("result =>", result);
+
     return res.status(200).json({
       success: true,
       message: "Image uploaded successfully",
@@ -205,16 +220,20 @@ const findPeople = async (req, res) => {
   try {
     const user = await User.findById(req.auth.id);
     console.log("user =>", user);
-    // user.following
+
     let following = user.following;
     following.push(req.auth.id);
-    const people = (await User.find({ id: { $nin: following } })).limit(10);
+
+    const people = await User.find({ _id: { $nin: following } }).limit(10);
     console.log("people =>", people);
+
     res.status(200).json({ people });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 const forgotPassword = async (req, res) => {
   const { email, newPassword, repeatPassword, selectedQuestion, secretAnswer } =
@@ -282,10 +301,12 @@ const profileUpdate = async (req, res) => {
       repeatPassword,
       about,
       username,
+      image,
     } = req.body;
 
     // Retrieve the user from the database
     const user = await User.findById(userId);
+    console.log("user =>", image);
 
     // Update user properties
     user.name = name;
@@ -294,6 +315,10 @@ const profileUpdate = async (req, res) => {
     user.secretAnswer = secretAnswer;
     user.about = about;
     user.userName = username;
+    user.photo = {
+      data: image.url,
+      contentType: image.public_id,
+    };
 
     // Manual validations
     const errors = [];
