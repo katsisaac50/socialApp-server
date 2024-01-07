@@ -224,7 +224,7 @@ const findPeople = async (req, res) => {
     let following = user.following;
     following.push(req.auth.id);
 
-    const people = await User.find({ _id: { $nin: following } }).limit(10);
+    const people = await User.find({ _id: { $nin: following } }).select("-password -secretAnswer").limit(10);
     console.log("people =>", people);
 
     res.status(200).json({ people });
