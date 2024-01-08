@@ -365,6 +365,28 @@ const profileUpdate = async (req, res) => {
   }
 };
 
+const followUser = async (req, res) => {
+
+  console.log(req);
+  try {
+    const user = await User.findById(req.auth.id);
+    // console.log("user =>", user);
+    const following = user.following;
+    following.push(req.body._id);
+    user.following = following;
+
+    await user.save();
+    res.status(200).json({
+      message: "User followed successfully",
+      user,
+      success: true,
+    });
+  }catch (error){
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+} ;
+
 module.exports = {
   register,
   login,
@@ -374,4 +396,5 @@ module.exports = {
   imageUpload,
   profileUpdate,
   findPeople,
+  followUser
 };

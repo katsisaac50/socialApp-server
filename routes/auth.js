@@ -14,7 +14,8 @@ const {
         forgotPassword,
         imageUpload,
         profileUpdate,
-        findPeople
+        findPeople,
+        followUser
         } = require('../controllers/auth');
 
 // routes
@@ -31,6 +32,7 @@ router.post (
         );
 router.put ('/profile-update', requireSignin, profileUpdate);
 router.get ('/find-people', requireSignin, findPeople);
+router.put ('/follow-user', requireSignin, followUser);
 
 
 
