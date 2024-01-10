@@ -8,7 +8,8 @@ const {
         userPostUpdate,
         deletePost,
         likePost,
-        dislikePost
+        dislikePost,
+        newsFeed
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
@@ -17,5 +18,5 @@ router.put('/update-post/:_id', requireSignin, canEditDeletePost, userPostUpdate
 router.delete('/delete-post/:_id', requireSignin, canEditDeletePost, deletePost);
 router.post('/like-post/:_id', requireSignin, likePost);
 router.post('/dislike-post/:_id', requireSignin, dislikePost);
-
+router.get('/news-feed', requireSignin, newsFeed);
 module.exports = router;

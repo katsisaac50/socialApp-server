@@ -375,9 +375,12 @@ const followUser = async (req, res) => {
     following.push(req.body._id);
     user.following = following;
 
+    // find the user to follow
+    const followedUser = await User.findById(req.body._id);
+
     await user.save();
     res.status(200).json({
-      message: "User followed successfully",
+      message: `following ${followedUser.name} successfully`,
       user,
       success: true,
     });

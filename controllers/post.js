@@ -109,11 +109,33 @@ const postByUser = async(req, res) => {
     }
 }
 
+const newsFeed = async(req, res) => {
+    try {
+        const user = await User.findById(req.auth.id);
+        const following = user.following;
+        following.push(user.id);
+        const posts = await Post.find({ user: { $in: following } }).populate('user','name _id image').sort('-createdAt').limit(10);
+        return res.status(200).json({
+            success: true,
+            posts
+        })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            success: false,
+            message: 'Posts not found'
+        })
+    };
+};
+
+
 module.exports = {
     postByUser,
     likePost,
     userPost,
     userPostUpdate,
     deletePost,
-    dislikePost
+    dislikePost,
+    newsFeed
 }
