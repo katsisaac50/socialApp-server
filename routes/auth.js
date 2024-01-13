@@ -15,8 +15,10 @@ const {
         imageUpload,
         profileUpdate,
         findPeople,
-        followUser
+        followUser,
+        userFollowing
         } = require('../controllers/auth');
+const { userInfo } = require('os');
 
 // routes
 router.post('/register', register);
@@ -33,6 +35,7 @@ router.post (
 router.put ('/profile-update', requireSignin, profileUpdate);
 router.get ('/find-people', requireSignin, findPeople);
 router.put ('/follow-user', requireSignin, followUser);
+router.get ('/user-following', requireSignin, userFollowing);
 
 
 

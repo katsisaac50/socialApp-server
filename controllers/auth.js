@@ -390,6 +390,20 @@ const followUser = async (req, res) => {
 }
 } ;
 
+const userFollowing = async (req, res) => {
+  try {
+    const user = await User.findById(req.auth.id);
+    const following = user.following;
+    const followingUsers = await User.find({ _id: { $in: following } }).select(
+      "-password -secretAnswer"
+    );
+    res.status(200).json({ followingUsers });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -399,5 +413,6 @@ module.exports = {
   imageUpload,
   profileUpdate,
   findPeople,
-  followUser
+  followUser,
+  userFollowing
 };
