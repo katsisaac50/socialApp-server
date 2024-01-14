@@ -390,6 +390,19 @@ const followUser = async (req, res) => {
 }
 } ;
 
+const unfollowUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.auth.id);
+    console.log("user =>", user);
+    const following = user.following;
+    following.pull(req.body._id);
+    console.log("following =>", following);
+    user.following = following;
+  } catch (error) {
+    console.log(error);
+  };
+};
+
 const userFollowing = async (req, res) => {
   try {
     const user = await User.findById(req.auth.id);
@@ -404,6 +417,44 @@ const userFollowing = async (req, res) => {
   }
 };
 
+// middleware to remove follower from user
+const removeFollower = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.body._id, {
+      $pull: {followers: req.user._id},
+    });
+    next();
+    
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const usersFollowing = async (req, res) => {
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id, 
+      {
+        $push: {
+          following: req.body._id,
+        }
+      },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json({
+        message: "User followed successfully",
+        user,
+        success: true,
+      })
+    
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -414,5 +465,8 @@ module.exports = {
   profileUpdate,
   findPeople,
   followUser,
-  userFollowing
+  userFollowing,
+  unfollowUser,
+  usersFollowing,
+  removeFollower,
 };
