@@ -39,7 +39,7 @@ router.put ('/profile-update', requireSignin, profileUpdate);
 router.get ('/find-people', requireSignin, findPeople);
 router.put ('/follow-user', requireSignin, followUser);
 router.get ('/user-following', requireSignin, userFollowing);
-router.delete('/user-unfollow', requireSignin, unfollowUser);
+// router.delete('/user-unfollow', requireSignin, unfollowUser);
 router.put ('/unfollow-user', requireSignin, removeFollower, usersFollowing);
 
 

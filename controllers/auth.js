@@ -419,9 +419,11 @@ const userFollowing = async (req, res) => {
 
 // middleware to remove follower from user
 const removeFollower = async (req, res, next) => {
+  console.log(req);
+  let personId = req.body.data.personId;
   try {
-    const user = await User.findByIdAndUpdate(req.body._id, {
-      $pull: {followers: req.user._id},
+    const user = await User.findByIdAndUpdate(personId, {
+      $pull: {followers: req.auth.id},
     });
     next();
     
@@ -432,12 +434,14 @@ const removeFollower = async (req, res, next) => {
 
 const usersFollowing = async (req, res) => {
 
+  let personId = req.body.data.personId; 
+
   try {
     const user = await User.findByIdAndUpdate(
-      req.user._id, 
+      req.auth.id, 
       {
-        $push: {
-          following: req.body._id,
+        $pull: {
+          following: personId,
         }
       },
         {
