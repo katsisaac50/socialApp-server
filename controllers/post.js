@@ -3,7 +3,7 @@ const User = require('../models/user');
 const cloudinary = require('cloudinary');
 
 const likePost = async(req, res) => {
-    
+    console.log("Roger")
     try {
         const postId = req.params._id;
         const {likes} = await Post.findByIdAndUpdate(postId, { $addToSet: { likes: req.auth.id } }, { new: true });
@@ -12,7 +12,7 @@ const likePost = async(req, res) => {
             likes
         })
     } catch (error) {
-        
+        console.log(error);
     }
 }
 

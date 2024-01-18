@@ -14,11 +14,10 @@ const postSchema = new mongoose.Schema({
         url: String,
         public_id: String
     },
-    likes: {
-        type: Number,
-        default: 0,
-        ref: 'User'
-    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
     dislikes: {
         type: Number,
         default: 0,
