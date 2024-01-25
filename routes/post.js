@@ -9,7 +9,8 @@ const {
         deletePost,
         likePost,
         dislikePost,
-        newsFeed
+        newsFeed,
+        createComment
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
@@ -19,4 +20,5 @@ router.delete('/delete-post/:_id', requireSignin, canEditDeletePost, deletePost)
 router.put('/like-post/:_id', requireSignin, likePost);
 router.put('/dislike-post/:_id', requireSignin, dislikePost);
 router.get('/news-feed', requireSignin, newsFeed);
+router.post('/create-comment', requireSignin, createComment);
 module.exports = router;

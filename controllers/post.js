@@ -129,6 +129,31 @@ const newsFeed = async(req, res) => {
     };
 };
 
+const createComment = async(req, res) => {
+    console.log(req.body)
+    try {
+        const post = await Post.findById(req.body.postId);
+        const user = await User.findById(req.auth.id);
+        const comment = {
+            text: req.body.content,
+            user: user.id
+        }
+        post.comments.push(comment);
+        await post.save();
+        return res.status(200).json({
+            success: true,
+            message: 'Comment successfully created',
+            post
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            success: false,
+            message: 'Comment not created'
+        })
+    }
+}   
+
 
 module.exports = {
     postByUser,
@@ -137,5 +162,6 @@ module.exports = {
     userPostUpdate,
     deletePost,
     dislikePost,
-    newsFeed
+    newsFeed,
+    createComment
 }
