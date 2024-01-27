@@ -34,7 +34,9 @@ const userPost = async(req, res) => {
    console.log(req.params) 
    try {
 
-    const post = await Post.findById(req.params._id);
+    const post = await Post.findById(req.params._id)
+    .populate('user', '_id name image')
+    .populate('comments.user', '_id name image');
 
     return res.status(200).json({
         post,
@@ -154,6 +156,27 @@ const createComment = async(req, res) => {
     }
 }   
 
+const removeComment = async(req, res) => {
+    try {
+        const post = await Post.findById(req.params._id);
+        const commentId = req.params.commentId;
+        const commentIndex = post.comments.findIndex(comment => comment.id === commentId);
+        post.comments.splice(commentIndex, 1);
+        await post.save();
+        return res.status(200).json({
+            success: true,
+            message: 'Comment successfully deleted',
+            post
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            success: false,
+            message: 'Comment not deleted'
+        })
+    }
+};
+
 
 module.exports = {
     postByUser,
@@ -163,5 +186,6 @@ module.exports = {
     deletePost,
     dislikePost,
     newsFeed,
-    createComment
+    createComment,
+    removeComment
 }
