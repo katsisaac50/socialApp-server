@@ -22,5 +22,5 @@ router.put('/like-post/:_id', requireSignin, likePost);
 router.put('/dislike-post/:_id', requireSignin, dislikePost);
 router.get('/news-feed', requireSignin, newsFeed);
 router.post('/create-comment', requireSignin, createComment);
-router.delete('/delete-comment/:_id', requireSignin, removeComment);
+router.delete('/user/post/:postId/comment/:commentId', requireSignin, removeComment);
 module.exports = router;

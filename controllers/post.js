@@ -156,24 +156,41 @@ const createComment = async(req, res) => {
     }
 }   
 
-const removeComment = async(req, res) => {
+const removeComment = async (req, res) => {
     try {
-        const post = await Post.findById(req.params._id);
-        const commentId = req.params.commentId;
+        const postId = req.params.postId; // Extract post ID from route parameters
+        const commentId = req.params.commentId; // Extract comment ID from route parameters
+        
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: 'Post not found'
+            });
+        }
+
         const commentIndex = post.comments.findIndex(comment => comment.id === commentId);
+        if (commentIndex === -1) {
+            return res.status(404).json({
+                success: false,
+                message: 'Comment not found'
+            });
+        }
+
         post.comments.splice(commentIndex, 1);
         await post.save();
+
         return res.status(200).json({
             success: true,
             message: 'Comment successfully deleted',
             post
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(400).json({
             success: false,
             message: 'Comment not deleted'
-        })
+        });
     }
 };
 
