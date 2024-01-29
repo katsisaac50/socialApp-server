@@ -12,6 +12,7 @@ const {
         newsFeed,
         createComment,
         removeComment,
+        totalPosts
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
@@ -23,4 +24,5 @@ router.put('/dislike-post/:_id', requireSignin, dislikePost);
 router.get('/news-feed', requireSignin, newsFeed);
 router.post('/create-comment', requireSignin, createComment);
 router.delete('/user/post/:postId/comment/:commentId', requireSignin, removeComment);
+router.get('/total-posts', requireSignin, totalPosts);
 module.exports = router;

@@ -194,6 +194,18 @@ const removeComment = async (req, res) => {
     }
 };
 
+const totalPosts = async (req, res) => {
+    try {
+        const total = await Post.find().estimatedDocumentCount();
+        return res.status(200).json({
+            success: true,
+            total
+        })
+    } catch (error) {
+        console.log(error)
+    }
+};
+
 
 module.exports = {
     postByUser,
@@ -204,5 +216,6 @@ module.exports = {
     dislikePost,
     newsFeed,
     createComment,
-    removeComment
+    removeComment,
+    totalPosts
 }
