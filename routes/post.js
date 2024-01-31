@@ -12,7 +12,8 @@ const {
         newsFeed,
         createComment,
         removeComment,
-        totalPosts
+        totalPosts,
+        searchUserPost
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
@@ -21,8 +22,9 @@ router.put('/update-post/:_id', requireSignin, canEditDeletePost, userPostUpdate
 router.delete('/delete-post/:_id', requireSignin, canEditDeletePost, deletePost);
 router.put('/like-post/:_id', requireSignin, likePost);
 router.put('/dislike-post/:_id', requireSignin, dislikePost);
-router.get('/news-feed', requireSignin, newsFeed);
+router.get('/news-feed/:page', requireSignin, newsFeed);
 router.post('/create-comment', requireSignin, createComment);
 router.delete('/user/post/:postId/comment/:commentId', requireSignin, removeComment);
 router.get('/total-posts', requireSignin, totalPosts);
+router.get('/user/search', requireSignin, searchUserPost);
 module.exports = router;

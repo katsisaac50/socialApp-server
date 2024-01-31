@@ -3,11 +3,11 @@ const User = require('../models/user');
 const cloudinary = require('cloudinary');
 
 const likePost = async(req, res) => {
-    console.log("Roger")
+    
     try {
         const postId = req.params._id;
         const {likes} = await Post.findByIdAndUpdate(postId, { $addToSet: { likes: req.auth.id } }, { new: true });
-        console.log(likes)
+        
         return res.status(200).json({
             likes
         })
@@ -31,7 +31,7 @@ const dislikePost = async(req, res) => {
 }
 
 const userPost = async(req, res) => {
-   console.log(req.params) 
+   
    try {
 
     const post = await Post.findById(req.params._id)
@@ -112,11 +112,17 @@ const postByUser = async(req, res) => {
 }
 
 const newsFeed = async(req, res) => {
+
+    const page = req.params.page || 1;
+    const postsPerPage = 3;
+    const skip = (page - 1) * postsPerPage;
+   
     try {
         const user = await User.findById(req.auth.id);
         const following = user.following;
         following.push(user.id);
-        const posts = await Post.find({ user: { $in: following } }).populate('user','name _id image').sort('-createdAt').limit(10);
+         const posts = await Post.find().populate('user','name _id image').sort('-createdAt').skip(skip).limit(postsPerPage);
+        // const posts = await Post.find({ user: { $in: following } }).populate('user','name _id image').sort('-createdAt').limit(10);
         return res.status(200).json({
             success: true,
             posts
@@ -132,7 +138,7 @@ const newsFeed = async(req, res) => {
 };
 
 const createComment = async(req, res) => {
-    console.log(req.body)
+    
     try {
         const post = await Post.findById(req.body.postId);
         const user = await User.findById(req.auth.id);
@@ -206,6 +212,24 @@ const totalPosts = async (req, res) => {
     }
 };
 
+const searchUserPost = async (req, res) => {
+    console.log(req)
+    try {
+        const query = req.params.query;
+        const posts = await Post.find({
+            $text: {
+                $search: query
+            }
+        }).populate('user', '_id name image').populate('comments.user', '_id name image');
+        return res.status(200).json({
+            success: true,
+            posts
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     postByUser,
@@ -217,5 +241,6 @@ module.exports = {
     newsFeed,
     createComment,
     removeComment,
-    totalPosts
+    totalPosts,
+    searchUserPost
 }
