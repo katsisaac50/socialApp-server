@@ -213,9 +213,9 @@ const totalPosts = async (req, res) => {
 };
 
 const searchUserPost = async (req, res) => {
-    console.log(req)
+    console.log(req.query)
     try {
-        const query = req.params.query;
+        const query = req.query.query;
         const posts = await Post.find({
             $text: {
                 $search: query
