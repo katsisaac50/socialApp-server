@@ -120,7 +120,6 @@ const login = async (req, res) => {
 };
 
 const currentUser = async (req, res) => {
-  console.log("current user =>", req.auth);
 
   try {
     const user = await User.findOne({ email: req.auth.email }).select(
@@ -140,7 +139,6 @@ const currentUser = async (req, res) => {
 
 const createPost = async (req, res) => {
   const { content, image } = req.body;
-  console.log("create post =>", content);
 
   try {
     const user = await User.findOne({ email: req.auth.email }).select(
@@ -200,8 +198,6 @@ const imageUpload = async (req, res) => {
     // // Save the new post to the database
     // const savedPost = await newPost.save();
 
-    console.log("result =>", result);
-
     return res.status(200).json({
       success: true,
       message: "Image uploaded successfully",
@@ -219,13 +215,11 @@ const imageUpload = async (req, res) => {
 const findPeople = async (req, res) => {
   try {
     const user = await User.findById(req.auth.id);
-    console.log("user =>", user);
 
     let following = user.following;
     following.push(req.auth.id);
 
     const people = await User.find({ _id: { $nin: following } }).select("-password -secretAnswer").limit(10);
-    console.log("people =>", people);
 
     res.status(200).json({ people });
   } catch (error) {
@@ -287,7 +281,6 @@ const forgotPassword = async (req, res) => {
 };
 
 const profileUpdate = async (req, res) => {
-  console.log(req.params);
 
   try {
     const userId = req.auth.id;
@@ -306,7 +299,6 @@ const profileUpdate = async (req, res) => {
 
     // Retrieve the user from the database
     const user = await User.findById(userId);
-    console.log("user =>", image);
 
     // Update user properties
     user.name = name;
@@ -367,7 +359,6 @@ const profileUpdate = async (req, res) => {
 
 const followUser = async (req, res) => {
 
-  console.log(req);
   try {
     const user = await User.findById(req.auth.id);
     // console.log("user =>", user);
@@ -393,7 +384,6 @@ const followUser = async (req, res) => {
 const unfollowUser = async (req, res) => {
   try {
     const user = await User.findById(req.auth.id);
-    console.log("user =>", user);
     const following = user.following;
     following.pull(req.body._id);
     console.log("following =>", following);
@@ -419,7 +409,6 @@ const userFollowing = async (req, res) => {
 
 // middleware to remove follower from user
 const removeFollower = async (req, res, next) => {
-  console.log(req);
   let personId = req.body.data.personId;
   try {
     const user = await User.findByIdAndUpdate(personId, {

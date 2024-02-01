@@ -35,4 +35,10 @@ const postSchema = new mongoose.Schema({
     }]
 },{timestamps: true});
 
+postSchema.index({
+    'user.name': 'text', // Assuming 'name' is the field in the 'user' subdocument
+    'user.username': 'text', // Assuming 'username' is a field in the 'user' subdocument
+    // Add other fields related to username or additional fields you want to search
+});
+
 module.exports = mongoose.model('Post', postSchema);

@@ -7,7 +7,6 @@ const likePost = async(req, res) => {
     try {
         const postId = req.params._id;
         const {likes} = await Post.findByIdAndUpdate(postId, { $addToSet: { likes: req.auth.id } }, { new: true });
-        
         return res.status(200).json({
             likes
         })
@@ -21,7 +20,6 @@ const dislikePost = async(req, res) => {
     try {
         const postId = req.params._id;
         const {likes} = await Post.findByIdAndUpdate(postId, { $pull: { likes: req.auth.id } }, { new: true });
-        console.log(likes)
         return res.status(200).json({
             likes
         })
@@ -212,18 +210,22 @@ const totalPosts = async (req, res) => {
     }
 };
 
-const searchUserPost = async (req, res) => {
+const searchUser = async (req, res) => {
     console.log(req.query)
+    const query = req.query.query;
+    if (!query) return;
     try {
-        const query = req.query.query;
-        const posts = await Post.find({
-            $text: {
-                $search: query
+        const users = await User.find({
+            name: {
+                $regex: query,
+                $options: 'i'
             }
-        }).populate('user', '_id name image').populate('comments.user', '_id name image');
+        }).limit(10);
+        console.log(users);
+
         return res.status(200).json({
             success: true,
-            posts
+            users
         })
     } catch (error) {
         console.log(error)
@@ -242,5 +244,5 @@ module.exports = {
     createComment,
     removeComment,
     totalPosts,
-    searchUserPost
+    searchUser
 }
