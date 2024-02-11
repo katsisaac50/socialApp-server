@@ -357,14 +357,24 @@ const profileUpdate = async (req, res) => {
   }
 };
 
-const followUser = async (req, res) => {
-
+// middleware for add follower
+const addFollower = async (req, res, next) => {
   try {
-    const user = await User.findById(req.auth.id);
-    // console.log("user =>", user);
-    const following = user.following;
-    following.push(req.body._id);
-    user.following = following;
+    const user = await User.findByIdAndUpdate(req.body._id,{
+      $addToSet: { followers: req.auth.id }
+    });
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const followUser = async (req, res) => {
+// console.log(req.body)
+  try {
+    const user = await User.findByIdAndUpdate(req.auth.id,{
+      $addToSet: { following: req.body._id }
+    },{ new: true });
 
     // find the user to follow
     const followedUser = await User.findById(req.body._id);
@@ -409,6 +419,7 @@ const userFollowing = async (req, res) => {
 
 // middleware to remove follower from user
 const removeFollower = async (req, res, next) => {
+  console.log("remove follower =>", req.body);
   let personId = req.body.data.personId;
   try {
     const user = await User.findByIdAndUpdate(personId, {
@@ -462,4 +473,5 @@ module.exports = {
   unfollowUser,
   usersFollowing,
   removeFollower,
+  addFollower,
 };

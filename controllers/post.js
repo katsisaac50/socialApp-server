@@ -211,25 +211,35 @@ const totalPosts = async (req, res) => {
 };
 
 const searchUser = async (req, res) => {
-    console.log(req.query)
-    const query = req.query.query;
-    if (!query) return;
-    try {
-        const users = await User.find({
-            name: {
-                $regex: query,
-                $options: 'i'
-            }
-        }).limit(10);
-        console.log(users);
+  console.log(req.query);
+  const query = req.query.query;
+  if (!query) return;
+  try {
+    const users = await User.find({
+      $or: [
+        {
+          name: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+        {
+          username: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+      ],
+    }).select("-password -secretAnswer").limit(10);
+    console.log(users);
 
-        return res.status(200).json({
-            success: true,
-            users
-        })
-    } catch (error) {
-        console.log(error)
-    }
+    return res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 

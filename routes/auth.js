@@ -19,7 +19,8 @@ const {
         userFollowing,
         unfollowUser,
         usersFollowing,
-        removeFollower
+        removeFollower,
+        addFollower
         } = require('../controllers/auth');
 const { userInfo } = require('os');
 
@@ -37,7 +38,7 @@ router.post (
         );
 router.put ('/profile-update', requireSignin, profileUpdate);
 router.get ('/find-people', requireSignin, findPeople);
-router.put ('/follow-user', requireSignin, followUser);
+router.put ('/follow-user', requireSignin, addFollower, followUser);
 router.get ('/user-following', requireSignin, userFollowing);
 // router.delete('/user-unfollow', requireSignin, unfollowUser);
 router.put ('/unfollow-user', requireSignin, removeFollower, usersFollowing);
