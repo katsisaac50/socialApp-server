@@ -242,6 +242,20 @@ const searchUser = async (req, res) => {
   }
 }
 
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.params._id).select("-password -secretAnswer");
+        
+        return res.status(200).json({
+            success: true,
+            user,
+        });
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 
 module.exports = {
     postByUser,
@@ -254,5 +268,6 @@ module.exports = {
     createComment,
     removeComment,
     totalPosts,
-    searchUser
+    searchUser,
+    getUserProfile
 }
