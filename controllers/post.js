@@ -256,6 +256,23 @@ const getUserProfile = async (req, res) => {
     }
 }
 
+const posts = async (req, res) => {
+    try {
+         const posts = await Post.find()
+         .populate('user', '_id name image')  
+        .sort('-createdAt')
+        .limit(12);
+        console.log(posts)
+        return res.status(200).json({
+            success: true,
+            posts 
+        })
+        
+    } catch (error) {
+        
+    }
+}
+
 
 module.exports = {
     postByUser,
@@ -269,5 +286,6 @@ module.exports = {
     removeComment,
     totalPosts,
     searchUser,
-    getUserProfile
+    getUserProfile,
+    posts
 }

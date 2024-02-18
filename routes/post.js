@@ -14,7 +14,8 @@ const {
         removeComment,
         totalPosts,
         searchUser,
-        getUserProfile
+        getUserProfile,
+        posts
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
@@ -29,4 +30,5 @@ router.delete('/user/post/:postId/comment/:commentId', requireSignin, removeComm
 router.get('/total-posts', requireSignin, totalPosts);
 router.get('/user/search', requireSignin, searchUser);
 router.get('/api/users/:_id', requireSignin, getUserProfile);
+router.get('/posts', posts);
 module.exports = router;
