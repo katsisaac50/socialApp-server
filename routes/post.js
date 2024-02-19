@@ -15,7 +15,8 @@ const {
         totalPosts,
         searchUser,
         getUserProfile,
-        posts
+        posts,
+        getPost
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
@@ -31,4 +32,5 @@ router.get('/total-posts', requireSignin, totalPosts);
 router.get('/user/search', requireSignin, searchUser);
 router.get('/api/users/:_id', requireSignin, getUserProfile);
 router.get('/posts', posts);
+router.get('/post/:_id', getPost);
 module.exports = router;

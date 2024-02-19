@@ -269,7 +269,21 @@ const posts = async (req, res) => {
         })
         
     } catch (error) {
-        
+        console.log(error);
+    }
+}
+
+const getPost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params._id)
+        .populate('user', '_id name image')
+        .populate('comments.user', '_id name image');
+        return res.status(200).json({
+            success: true,
+            post
+        })
+    } catch (err){
+        console.log(err)
     }
 }
 
@@ -287,5 +301,6 @@ module.exports = {
     totalPosts,
     searchUser,
     getUserProfile,
-    posts
+    posts,
+    getPost
 }
