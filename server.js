@@ -1,59 +1,3 @@
-// const express = require('express');
-// const cors = require('cors');
-// const mongoose = require('mongoose');
-// const morgan = require('morgan');
-// const dotenv = require('dotenv');
-
-// dotenv.config();
-
-// const app = express();
-
-// const mongodbUri = process.env.MONGODB_URI;
-
-
-// // db connection
-// mongoose.connect(mongodbUri, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useFindAndModify: false,
-//   useCreateIndex: true,
-// })
-//   .then(() => {
-//     console.log('MongoDB connected');
-//   })
-//   .catch((err) => {
-//     console.error('MongoDB connection error:', err);
-//   });
-
-// // middleware
-// app.use(cors({
-//   origin: 'http://localhost:3000',
-// }));
-// app.use(express.json({
-//   limit: '50mb',
-//   type: 'application/json',
-// }));
-// app.use(morgan('dev'));
-// app.use(express.urlencoded({ extended: true }));
-
-// // routes
-// // app.use('/api/v1/auth', require('./routes/auth'));
-// // app.use('/api/v1/users', require('./routes/users'));
-// // app.use('/api/v1/posts', require('./routes/posts'));
-// // app.use('/api/v1/comments', require('./routes/comments'));
-// // app.use('/api/v1/likes', require('./routes/likes'));
-// // app.use('/api/v1/dislikes', require('./routes/dislikes'));
-
-// // routes
-// app.post('/api/register', (req, res) => {
-//   console.log('Register =>', req.body);
-//   res.status(200).json({ message: 'Registration successful' });
-// });
-
-// const port = process.env.PORT || 8006;
-
-// app.listen(port, () => console.log(`Server is running on port ${port}`));
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -61,52 +5,39 @@ const morgan = require('morgan');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
-const {readdirSync} = require('fs');
+const { readdirSync } = require('fs');
+const socketIO = require('socket.io');
 
 require('dotenv').config();
-const app = express();
-http.createServer(app);
-const io = require('socket.io')(http);
-const port = process.env.PORT || 8007;
 
+const app = express();
+const port = process.env.PORT || 8007;
 const mongodbUri = process.env.MONGODB_URI;
 
-// Enable CORS
-app.options('*', cors());
-
-app.use(cors({
-  origin: [process.env.CLIENT_URL,'https://localhost:3000'],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-}));
+// Enable CORS for regular HTTP requests
+app.use(cors());
 
 // Connect to MongoDB using Mongoose
 mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
   console.log('MongoDB connected');
-})
-.catch((err) => {
+}).catch((err) => {
   console.error('MongoDB connection error:', err);
 });
 
 // Set up middleware for parsing JSON requests
-app.use(express.json({
-  limit: '50mb',
-  type: 'application/json',
-}));
+app.use(express.json({ limit: '50mb', type: 'application/json' }));
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 
 // Set up routes
 readdirSync('./routes').forEach((file) => {
   const route = require(`./routes/${file}`);
-  // app.use('/api/v1/posts', require('./routes/posts'));
-  console.log(file);
   app.use('/api', route);
 });
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
-
 
 // Create an HTTP server
 const server = process.env.NODE_ENV === 'production'
@@ -116,9 +47,13 @@ const server = process.env.NODE_ENV === 'production'
     }, app)
   : http.createServer(app);
 
-// Set up socket.io middleware
+// Initialize Socket.IO
+const io = socketIO(server);
+
+// Socket.IO event handling
 io.on('connection', (socket) => {
   console.log('a user connected');
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
@@ -128,5 +63,3 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
