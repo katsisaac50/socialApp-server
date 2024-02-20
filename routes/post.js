@@ -32,5 +32,5 @@ router.get('/total-posts', requireSignin, totalPosts);
 router.get('/user/search', requireSignin, searchUser);
 router.get('/api/users/:_id', requireSignin, getUserProfile);
 router.get('/posts', posts);
-router.get('/post/:_id', getPost);
+router.get('/post/view/:_id', getPost);
 module.exports = router;

@@ -65,6 +65,8 @@ const {readdirSync} = require('fs');
 
 require('dotenv').config();
 const app = express();
+http.createServer(app);
+const io = require('socket.io')(http);
 const port = process.env.PORT || 8007;
 
 const mongodbUri = process.env.MONGODB_URI;
@@ -73,7 +75,7 @@ const mongodbUri = process.env.MONGODB_URI;
 app.options('*', cors());
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: [process.env.CLIENT_URL,'https://localhost:3000'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
 }));
 
@@ -113,6 +115,14 @@ const server = process.env.NODE_ENV === 'production'
       cert: fs.readFileSync('path/to/certificate.pem'),
     }, app)
   : http.createServer(app);
+
+// Set up socket.io middleware
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
 
 // Start the server
 server.listen(port, () => {
