@@ -7,11 +7,11 @@ const http = require('http');
 const fs = require('fs');
 const { readdirSync } = require('fs');
 const socketIO = require('socket.io');
+const certificates = require('./certificate.pem');
 
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 8007;
 const mongodbUri = process.env.MONGODB_URI;
 
 // Enable CORS for regular HTTP requests
@@ -42,8 +42,8 @@ app.get('/', (req, res) => {
 // Create an HTTP server
 const server = process.env.NODE_ENV === 'production'
   ? https.createServer({
-      key: fs.readFileSync('path/to/private-key.pem'),
-      cert: fs.readFileSync('path/to/certificate.pem'),
+      key: fs.readFileSync('/private-key.pem'),
+      cert: fs.readFileSync('/certificate.pem'),
     }, app)
   : http.createServer(app);
 
@@ -58,6 +58,8 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
+
+const port = process.env.PORT || 8007;
 
 // Start the server
 server.listen(port, () => {
