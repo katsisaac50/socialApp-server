@@ -7,24 +7,23 @@ const http = require('http');
 const fs = require('fs');
 const { readdirSync } = require('fs');
 const socketIO = require('socket.io');
-const certFile = '../server/certificate.pem';
-const privKey = '../server/private-key.pem';
 
-const pemContents = fs.readFileSync(certFile, 'utf8');
-    console.log(pemContents);
+// console.log(certificates)
 
 require('dotenv').config();
 
 const app = express();
 const mongodbUri = process.env.MONGODB_URI;
 
-// Enable CORS for regular HTTP requests
-app.use(cors());
-
 // Connect to MongoDB using Mongoose
-mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+mongoose.connect(mongodbUri, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true,
+})
+.then(() => {
   console.log('MongoDB connected');
-}).catch((err) => {
+})
+.catch((err) => {
   console.error('MongoDB connection error:', err);
 });
 
@@ -32,6 +31,9 @@ mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true }
 app.use(express.json({ limit: '50mb', type: 'application/json' }));
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
+
+// Enable CORS for regular HTTP requests
+app.use(cors());
 
 // Set up routes
 readdirSync('./routes').forEach((file) => {
@@ -46,8 +48,8 @@ app.get('/', (req, res) => {
 // Create an HTTP server
 const server = process.env.NODE_ENV === 'production'
   ? https.createServer({
-      key: fs.readFileSync(privKey, 'utf8'),
-      cert: fs.readFileSync(certFile, 'utf8'),
+      key: fs.readFileSync('../server/private-key.pem', 'utf8'),
+      cert: fs.readFileSync('../server/certificate.pem', 'utf8'),
     }, app)
   : http.createServer(app);
 
