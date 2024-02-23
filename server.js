@@ -58,7 +58,7 @@ const io = socketIO(server);
 
 // Socket.IO event handling
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('user connected with id:', socket.id);
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
