@@ -7,7 +7,11 @@ const http = require('http');
 const fs = require('fs');
 const { readdirSync } = require('fs');
 const socketIO = require('socket.io');
-const certificates = require('./certificate.pem');
+const certFile = '../server/certificate.pem';
+const privKey = '../server/private-key.pem';
+
+const pemContents = fs.readFileSync(certFile, 'utf8');
+    console.log(pemContents);
 
 require('dotenv').config();
 
@@ -42,8 +46,8 @@ app.get('/', (req, res) => {
 // Create an HTTP server
 const server = process.env.NODE_ENV === 'production'
   ? https.createServer({
-      key: fs.readFileSync('/private-key.pem'),
-      cert: fs.readFileSync('/certificate.pem'),
+      key: fs.readFileSync(privKey, 'utf8'),
+      cert: fs.readFileSync(certFile, 'utf8'),
     }, app)
   : http.createServer(app);
 
