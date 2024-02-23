@@ -33,7 +33,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS for regular HTTP requests
-app.use(cors());
+app.use(cors({ origin: '*' }));
 
 // Set up routes
 readdirSync('./routes').forEach((file) => {
@@ -54,7 +54,12 @@ const server = process.env.NODE_ENV === 'production'
   : http.createServer(app);
 
 // Initialize Socket.IO
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
 // Socket.IO event handling
 io.on('connection', (socket) => {
