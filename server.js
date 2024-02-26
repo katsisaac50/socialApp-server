@@ -67,6 +67,9 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
+    socket.on('recieve-message', (message) => {
+      socket.emit('send-message', message);
+    })
   });
 });
 
