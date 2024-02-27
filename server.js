@@ -65,12 +65,12 @@ const io = socketIO(server, {
 io.on('connection', (socket) => {
   console.log('user connected with id:', socket.id);
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-    socket.on('recieve-message', (message) => {
-      socket.emit('send-message', message);
+  
+    socket.on('send-message', (message) => {
+      // console.log('recieved message =>', message)
+      socket.broadcast.emit('recieve-message', message);
+      // socket.emit('recieve-message', message);
     })
-  });
 });
 
 const port = process.env.PORT || 8007;
