@@ -61,14 +61,26 @@ const io = socketIO(server, {
   }
 });
 
+// // Socket.IO event handling
+// io.on('connection', (socket) => {
+//   console.log('user connected with id:', socket.id);
+
+  
+//     socket.on('send-message', (message) => {
+//       // console.log('recieved message =>', message)
+//       socket.broadcast.emit('recieve-message', message);
+//       // socket.emit('recieve-message', message);
+//     })
+// });
+
 // Socket.IO event handling
 io.on('connection', (socket) => {
   console.log('user connected with id:', socket.id);
 
   
-    socket.on('send-message', (message) => {
-      // console.log('recieved message =>', message)
-      socket.broadcast.emit('recieve-message', message);
+    socket.on('new-post', (message) => {
+      //  console.log('recieved message =>', message)
+       socket.broadcast.emit('recieve-message', message);
       // socket.emit('recieve-message', message);
     })
 });

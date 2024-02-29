@@ -140,24 +140,27 @@ const currentUser = async (req, res) => {
 const createPost = async (req, res) => {
   const { content, image } = req.body;
 
+  if (!content) {
+    return res.status(400).json({ message: "Content is required" });
+  };
+  console.log(req.auth)
   try {
-    const user = await User.findOne({ email: req.auth.email }).select(
+    const post = new Post({
+      content,
+      image,
+      user: req.auth.id,
+    });
+
+    await post.save();
+
+    const postWithUser = await Post.findById(post._id).populate(
+      "user",
       "-password -secretAnswer"
     );
 
-    if (!user) {
-      return res.status(400).json({ message: "User does not exist" });
-    }
-
-    const newPost = new Post({
-      content,
-      image,
-      user: user._id,
-    });
-
-    await newPost.save();
 
     return res.status(200).json({
+      post: postWithUser,
       success: true,
       message: "Post created successfully",
     });
