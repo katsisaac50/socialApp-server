@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {requireSignin, canEditDeletePost} = require('../middlewares');
+const {requireSignin, canEditDeletePost, isAdmin} = require('../middlewares');
 
 const {
         postByUser,
@@ -16,12 +16,13 @@ const {
         searchUser,
         getUserProfile,
         posts,
-        getPost
+        getPost,
       } = require('../controllers/post');
 
 router.get('/user-posts', requireSignin, postByUser);
 router.get('/user/post/:_id', requireSignin, userPost);
 router.put('/update-post/:_id', requireSignin, canEditDeletePost, userPostUpdate);
+router.put('/admin/update-post/:_id', requireSignin, isAdmin, userPostUpdate);
 router.delete('/delete-post/:_id', requireSignin, canEditDeletePost, deletePost);
 router.put('/like-post/:_id', requireSignin, likePost);
 router.put('/dislike-post/:_id', requireSignin, dislikePost);
