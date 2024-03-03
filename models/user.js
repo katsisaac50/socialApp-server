@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
     data: String,
     contentType: String,
   },
+  role: {
+    type: String,
+    enum: ["Admin", "Subscriber"],
+    default: "Subscriber",
+  },
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   resetPasswordLink: {

@@ -22,7 +22,7 @@ const {
 router.get('/user-posts', requireSignin, postByUser);
 router.get('/user/post/:_id', requireSignin, userPost);
 router.put('/update-post/:_id', requireSignin, canEditDeletePost, userPostUpdate);
-router.put('/admin/update-post/:_id', requireSignin, isAdmin, userPostUpdate);
+ router.delete('/admin/delete-post/:_id', requireSignin, isAdmin, deletePost);
 router.delete('/delete-post/:_id', requireSignin, canEditDeletePost, deletePost);
 router.put('/like-post/:_id', requireSignin, likePost);
 router.put('/dislike-post/:_id', requireSignin, dislikePost);

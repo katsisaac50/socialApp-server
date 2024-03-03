@@ -3,7 +3,7 @@ const router = express.Router();
 const formidableMiddleware = require('express-formidable');
 
 // middlewares
-const {requireSignin} = require('../middlewares');
+const {requireSignin, isAdmin} = require('../middlewares');
 
 // controllers
 const {
@@ -23,6 +23,7 @@ const {
         addFollower
         } = require('../controllers/auth');
 const { userInfo } = require('os');
+// const { Admin } = require('mongodb');
 
 // routes
 router.post('/register', register);
@@ -42,6 +43,7 @@ router.put ('/follow-user', requireSignin, addFollower, followUser);
 router.get ('/user-following', requireSignin, userFollowing);
 // router.delete('/user-unfollow', requireSignin, unfollowUser);
 router.put ('/unfollow-user', requireSignin, removeFollower, usersFollowing);
+router.get ('/current-admin', requireSignin, isAdmin, currentUser);
 
 
 
