@@ -25,7 +25,9 @@ const canEditDeletePost = async(req, res, next) =>{
 
 const isAdmin = async (req, res, next) => {
     try {
+        console.log("user keyadmin=>",req)
         const user = await User.findById(req.auth.id);
+        
         if (user.role !== "Admin") {
             return res.status(403).send("Unauthorized");
         } else {
